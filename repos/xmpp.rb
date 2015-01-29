@@ -12,12 +12,10 @@ module Chattr
 				@client = Jabber::Client.new(@JID)
 				@client.connect
 				@client.auth(password)
-				log('before start')
 				@client.send(@presence)
-				@roster = @client.send(Jabber::Iq.new_rosterget())
-				@roster = Jabber::Roster::IqQueryRoster.receive_iq(@roster)
-				log(@roster)
-				log('after start')
+				@client.send_with_id Jabber::Iq.new_rosterget() do |data|
+					send("load.roster", data)
+				end
 
 			rescue Exception => e
 				err(e.message)
@@ -29,16 +27,21 @@ module Chattr
 			
 		end
 
+		def send(comm, message)
+			@socket.send(JSON.generate({command:comm, data:message}))
+
+		end
 
 
 		def log (msg)
-			@socket.send(JSON.generate({command:"recieve", data:msg}))
+			send("console.log",msg)
 		end
 
 		def err (msg)
-			@socket.send(JSON.generate({command:"error", data:msg}))
+			send("console.error", msg)
 			puts msg
 		end
+
 	end
 
 end

@@ -248,6 +248,7 @@ GEM
     tilt (1.4.1)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
+    xml-simple (1.1.4)
     xmpp4r (0.5.6)
 
 PLATFORMS
@@ -260,4 +261,5 @@ DEPENDENCIES
   sinatra-flash
   sinatra-websocket
   sinatra_more
+  xml-simple
   xmpp4r

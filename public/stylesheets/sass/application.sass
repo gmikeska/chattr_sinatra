@@ -1,6 +1,8 @@
 
 .titlebar
+  border-bottom: 1px solid #234E9F
   background: rgb(184, 225, 252)
+  height: 80px
   /* Old browsers
   background: -moz-linear-gradient(top, rgba(184, 225, 252, 1) 0%, rgba(169, 210, 243, 1) 10%, rgba(144, 186, 228, 1) 25%, rgba(144, 188, 234, 1) 37%, rgba(144, 191, 240, 1) 50%, rgba(107, 168, 229, 1) 51%, rgba(162, 218, 245, 1) 83%, rgba(189, 243, 253, 1) 100%)
   /* FF3.6+
@@ -17,15 +19,63 @@
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b8e1fc', endColorstr='#bdf3fd',GradientType=0 )
   /* IE6-9
   h1
+    color: white
+    text-shadow: 2px 2px 2px #000000, 1px 1px 1px #000000, -1px 1px 1px #000000, 1px -1px 1px #000000, -1px -1px 1px #000000
     margin-top: 0px
+    padding-top: 19px
+    padding-left: 15px
     margin-bottom: 0px
     margin-left: 1px
     font-weight: 800
 
 body
-  background-image: url('/images/background-pattern-006.gif')
+  background-image: url('/images/trianglify-background.svg')
   background-repeat: repeat
 
 
 .footer
   height: 200px
+
+.ui-window
+  background-color: white
+  border-top-left-radius: 12px
+  border-top-right-radius: 12px
+  -webkit-box-shadow: 7px 7px 5px 0px rgba(50, 50, 50, 0.57)
+  -moz-box-shadow: 7px 7px 5px 0px rgba(50, 50, 50, 0.57)
+  box-shadow: 7px 7px 5px 0px rgba(50, 50, 50, 0.57)
+.window-titlebar
+  background-color: blue
+  font-family: 'Montserrat', sans-serif
+.window-content
+  overflow: scroll
+  background-color:white
+.ui-titlebar
+  border-bottom: 1px solid black
+  background: rgb(184, 225, 252)
+  /* Old browsers
+  background: -moz-linear-gradient(top, rgba(184, 225, 252, 1) 0%, rgba(169, 210, 243, 1) 10%, rgba(144, 186, 228, 1) 25%, rgba(144, 188, 234, 1) 37%, rgba(144, 191, 240, 1) 50%, rgba(107, 168, 229, 1) 51%, rgba(162, 218, 245, 1) 83%, rgba(189, 243, 253, 1) 100%)
+  /* FF3.6+
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(184, 225, 252, 1)), color-stop(10%, rgba(169, 210, 243, 1)), color-stop(25%, rgba(144, 186, 228, 1)), color-stop(37%, rgba(144, 188, 234, 1)), color-stop(50%, rgba(144, 191, 240, 1)), color-stop(51%, rgba(107, 168, 229, 1)), color-stop(83%, rgba(162, 218, 245, 1)), color-stop(100%, rgba(189, 243, 253, 1)))
+  /* Chrome,Safari4+
+  background: -webkit-linear-gradient(top, rgba(184, 225, 252, 1) 0%, rgba(169, 210, 243, 1) 10%, rgba(144, 186, 228, 1) 25%, rgba(144, 188, 234, 1) 37%, rgba(144, 191, 240, 1) 50%, rgba(107, 168, 229, 1) 51%, rgba(162, 218, 245, 1) 83%, rgba(189, 243, 253, 1) 100%)
+  /* Chrome10+,Safari5.1+
+  background: -o-linear-gradient(top, rgba(184, 225, 252, 1) 0%, rgba(169, 210, 243, 1) 10%, rgba(144, 186, 228, 1) 25%, rgba(144, 188, 234, 1) 37%, rgba(144, 191, 240, 1) 50%, rgba(107, 168, 229, 1) 51%, rgba(162, 218, 245, 1) 83%, rgba(189, 243, 253, 1) 100%)
+  /* Opera 11.10+
+  background: -ms-linear-gradient(top, rgba(184, 225, 252, 1) 0%, rgba(169, 210, 243, 1) 10%, rgba(144, 186, 228, 1) 25%, rgba(144, 188, 234, 1) 37%, rgba(144, 191, 240, 1) 50%, rgba(107, 168, 229, 1) 51%, rgba(162, 218, 245, 1) 83%, rgba(189, 243, 253, 1) 100%)
+  /* IE10+
+  background: linear-gradient(to bottom, rgba(184, 225, 252, 1) 0%, rgba(169, 210, 243, 1) 10%, rgba(144, 186, 228, 1) 25%, rgba(144, 188, 234, 1) 37%, rgba(144, 191, 240, 1) 50%, rgba(107, 168, 229, 1) 51%, rgba(162, 218, 245, 1) 83%, rgba(189, 243, 253, 1) 100%)
+  /* W3C
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b8e1fc', endColorstr='#bdf3fd',GradientType=0 )
+  /* IE6-9
+  border-top-left-radius: 12px
+  height: 30px
+  border-top-right-radius: 12px
+  padding-left: 5px
+  padding-top: 4px
+
+
+.closeButton
+  width: 22px !important
+  height: 22px
+  float: right
+  margin-right: 9px
