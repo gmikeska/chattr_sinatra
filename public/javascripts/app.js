@@ -105,3 +105,9 @@ sampletable = function()
 	t.width('100%')
 	client.ui.newWindow("testwindow2","Another", t)
 }
+
+var App = Ember.Application.create();
+
+App.Router.map(function() {
+  this.route('index');
+});

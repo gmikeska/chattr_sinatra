@@ -6,8 +6,11 @@ require_relative 'repos/xmpp'
 set :server, 'thin'
 set :sockets, []
 
+
 module Chattr
 	class Server < Sinatra::Application
+
+		set :bind, '0.0.0.0'
 
 		get '/' do
 		  if !request.websocket?
