@@ -48,6 +48,7 @@ client.connect = function()
 	this.socket = socket
 	client = this
 	this.socket.onmessage = function (event) {
+		console.log(event)
   		obj = JSON.parse(event.data)
   		eventName = obj.eventName
   		delete obj['eventName']
