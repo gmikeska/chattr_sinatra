@@ -1,10 +1,13 @@
 var x2js = new X2JS(); 
 var client = {}
-client.ui = {}
-client.ui.windows = {}
+ui = {}
+views = {}
+models = {}
+client.handlers = {}
+ui.windows = {}
 
 
-client.ui.newWindow = function(name, title, content)
+ui.newWindow = function(name, title, content)
 {
 	var $window = $('<div>').attr('id', 'window-'+name).addClass('ui-window')
 	$window.append($('<div>').attr('id','window-titlebar-'+name).addClass('window-titlebar ui-titlebar').text(title))
@@ -36,9 +39,8 @@ client.ui.newWindow = function(name, title, content)
     $('#window-titlebar-'+name).append($close)
 	$('.ui-resizable-handle', '#window-content-'+name).remove()
 
-    client.ui.windows[name] = $window
+    ui.windows[name] = $window
 }
-client.handlers = {}
 client.connected = false
 client.connect = function()
 {
@@ -47,9 +49,9 @@ client.connect = function()
 	client = this
 	this.socket.onmessage = function (event) {
   		obj = JSON.parse(event.data)
-  		command = obj.command
-  		delete obj['command']
-  		client.trigger(command, obj)
+  		eventName = obj.eventName
+  		delete obj['eventName']
+  		client.trigger(eventName, obj)
 	}
 	socket.onopen = function (event) {
  		client.connected = true
@@ -83,7 +85,7 @@ client.on('console.log', function(x){
 	console.log("Message Recieved:"+x)
 })
 
-client.on('console.error', function(x){
+client.on('server.error', function(x){
 	console.error("Server Error:"+x)
 
 })
@@ -97,16 +99,31 @@ client.on('msg', function(x){
 	console.log("IM from "+ msg._from+":"+msg.body)
 })
 
+models.TestModel = Backbone.Model.extend({
+	addText:function(t){
+		this.set('text', this.get('text')+t)
+	}
+})
 
+mymodel = new models.TestModel({text:'yes'})
+
+
+views.testView = Backbone.View.extend({
+	tagName: "div",
+	initialize: function() {
+    this.listenTo(this.model, "change", this.render);
+  	},
+  	template: _.template('<div><%= text %></div>'),
+  	render: function() {
+    	this.$el.html(this.template(this.model.attributes))
+    	return(this)
+  }
+})
+myView = new views.testView({model:mymodel})
 sampletable = function()
 {
-	t = $('<table>')
-	console.log(client.roster)
-	$(client.roster, function(i,x){
-		console.log(x)
-		t.append($('<tr>').append($('<td>').text(x._jid)).css('border-bottom', '1px solid black'))
-	})
-	
-	t.width('100%')
-	client.ui.newWindow("testwindow2","Another", t)
+
+	ui.newWindow("testwindow2","Another", myView.el)
+
+	myView.render()
 }

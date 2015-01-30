@@ -42,7 +42,7 @@ module Chattr
 		end
 
 		def err (msg)
-			send("console.error", msg)
+			send("server.error", msg)
 			puts msg
 		end
 

@@ -21,7 +21,7 @@ module Chattr
 
 		      ws.onmessage do |msg|
 		      	@message = JSON.parse(msg)
-		      	case @message['command']
+		      	case @message['eventName']
 				when "login"
 				  @client = Chattr::User.new(@message['username'], @message['password'], ws)
 				when "logout"
@@ -29,10 +29,10 @@ module Chattr
 				when 'msg'
 					@client.chat_message(@message['user'], @message['message'])
 				when "echo"
-					message = {command: "recieve", data: @message['data']}
+					message = {eventName: "recieve", data: @message['data']}
 					ws.send(JSON.generate(message))
 				else
-				  puts "default case"
+				  puts @message['eventName']
 				end
 		      	
 		      end
