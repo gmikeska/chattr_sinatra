@@ -1,3 +1,4 @@
+//same code?
 var LoginWindow = Backbone.Model.extend({
 	flashMessage: function(msg) {
 		this.set('notification', msg)
@@ -18,12 +19,6 @@ loginWindow = new LoginWindow({
   // to set notification null; in order to render the template, however, initially there are no problems
   // and thus, no messages to flash to the user about errors with login
 });
-
-// model for friends Roster
-var FriendsRoster = Backbone.Model.extend({
-  rosterObject: null
-}),
-friendsRoster = new FriendsRoster({});
 
 // View for first model below
 var loginTemplateString = '<form>';
@@ -65,35 +60,12 @@ var LoginView = Backbone.View.extend({
   }
 });
 
-// this is the friends roster view
-var FriendsRosterView = Backbone.View.extend({
-  tagName: 'div',
-  initialize: function () {
-    this.listenTo(this.model, 'change', this.render)
-  },
-  template: _.template('<h1>Friends Go Here</h1>'),
-  render: function() {
-    this.$el.html(this.template(this.model.attributes));
-    return this;
-  },
-  events: {
-    'change': 'updateModel'
-  },
-  updateModel: function(friendsList) {
-    this.model.set('rosterObject', friendsList)
-  }
-});
-
-loginView = new LoginView({model:loginWindow});
-// friendsRosterView = new FriendsRosterView({model:friendsRoster});
+myView = new LoginView({model:loginWindow})
 
 var sampletable = function() {
-    ui.newWindow("testwindow2","Another", loginView.el)
-    loginView.render()
+    ui.newWindow("testwindow2","Another", myView.el)
+    myView.render()
     client.on('auth.error', function(x) {
       loginWindow.flashMessage(x);
-    });
-    client.on('load.roster', function(rosterData) {
-      // friendsRosterView.updateModel(rosterData);
     });
 };

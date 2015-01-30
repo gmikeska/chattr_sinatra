@@ -1,5 +1,5 @@
 require 'xmpp4r'
-
+#same code?
 module Chattr
 	class User
 		attr_accessor :socket
@@ -25,11 +25,7 @@ module Chattr
 				err(e.message)
 				send("auth.error", e.message)
 			end
-
-			log('connected!')
-
-
-			
+		
 		end
 
 		def send(comm, message)

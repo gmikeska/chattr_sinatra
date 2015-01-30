@@ -1,3 +1,4 @@
+//same code?
 var x2js = new X2JS(); 
 var client = {}
 ui = {}
