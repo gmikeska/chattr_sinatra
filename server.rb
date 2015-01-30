@@ -16,7 +16,6 @@ module Chattr
 
 		    request.websocket do |ws|
 		      ws.onopen do
-		        ws.send("Hello World!")
 		        settings.sockets << ws
 		      end
 
@@ -27,6 +26,8 @@ module Chattr
 				  @client = Chattr::User.new(@message['username'], @message['password'], ws)
 				when "logout"
 				  puts 'logout'
+				when 'msg'
+					@client.chat_message(@message['user'], @message['message'])
 				when "echo"
 					message = {command: "recieve", data: @message['data']}
 					ws.send(JSON.generate(message))

@@ -91,6 +91,11 @@ client.on('console.error', function(x){
 client.on('load.roster', function(x){
 	client.roster = x2js.xml_str2json(x).iq.query.item
 })
+client.on('msg', function(x){
+	msg = x2js.xml_str2json(x).message
+	if(msg.body != undefined)
+	console.log("IM from "+ msg._from+":"+msg.body)
+})
 
 
 sampletable = function()

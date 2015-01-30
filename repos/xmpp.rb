@@ -10,8 +10,12 @@ module Chattr
 				@presence = Jabber::Presence.new(nil,nil,nil)
 				@JID = Jabber::JID.new(username)
 				@client = Jabber::Client.new(@JID)
-				@client.connect
+				@connection = @client.connect
 				@client.auth(password)
+				@connection.message_callbacks.add do |data|
+					send('msg', data)
+
+				end
 				@client.send(@presence)
 				@client.send_with_id Jabber::Iq.new_rosterget() do |data|
 					send("load.roster", data)
@@ -42,6 +46,11 @@ module Chattr
 			puts msg
 		end
 
+		def chat_message(user, msg)
+			m = Jabber::Message.new(user, msg)
+			m.type=:chat
+			@client.send(m)
+		end
 	end
 
 end
