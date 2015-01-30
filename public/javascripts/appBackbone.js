@@ -64,8 +64,7 @@ myView = new LoginView({model:loginWindow})
 var sampletable = function() {
     ui.newWindow("testwindow2","Another", myView.el)
     myView.render()
-    client.on('server.error', function(x) {
-      loginWindow.flashMessage("fuck off");
-
+    client.on('auth.error', function(x) {
+      loginWindow.flashMessage(x);
     });
 };
