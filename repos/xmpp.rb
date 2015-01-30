@@ -32,7 +32,7 @@ module Chattr
 		end
 
 		def send(comm, message)
-			@socket.send(JSON.generate({command:comm, data:message}))
+			@socket.send(JSON.generate({eventName:comm, data:message}))
 
 		end
 
