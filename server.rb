@@ -24,6 +24,7 @@ module Chattr
 		      	case @message['eventName']
 				when "login"
 				  @client = Chattr::User.new(@message['username'], @message['password'], ws)
+				  ws.send(JSON.generate({eventName: "console.log", data: "logging in"}))
 				when "logout"
 				  puts 'logout'
 				when 'msg'

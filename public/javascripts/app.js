@@ -99,6 +99,7 @@ client.on('server.error', function(x){
 
 client.on('load.roster', function(x){
 	client.roster = x2js.xml_str2json(x).iq.query.item
+	console.log('Connected')
 })
 client.on('msg', function(x){
 	msg = x2js.xml_str2json(x).message

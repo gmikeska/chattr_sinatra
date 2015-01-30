@@ -7,6 +7,7 @@ module Chattr
 			@socket = ws
 
 			begin
+				send('console.log','logging in... motherfucker')
 				@presence = Jabber::Presence.new(nil,nil,nil)
 				@JID = Jabber::JID.new(username)
 				@client = Jabber::Client.new(@JID)
@@ -35,7 +36,7 @@ module Chattr
 
 
 		def log (msg)
-			send("console.log",msg)
+			send("console.log", msg)
 		end
 
 		def err (msg)
