@@ -60,7 +60,7 @@ var LoginView = Backbone.View.extend({
   },
   login: function(e) {
     e.preventDefault();
-
+    console.log("login sent");
     this.model.login();
   }
 });
@@ -84,7 +84,7 @@ var FriendsRosterView = Backbone.View.extend({
   }
 });
 
-loginView = new LoginView({model:loginWindow});
+var loginView = new LoginView({model:loginWindow});
 // friendsRosterView = new FriendsRosterView({model:friendsRoster});
 
 var sampletable = function() {
