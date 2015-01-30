@@ -48,7 +48,6 @@ client.connect = function()
 	this.socket = socket
 	client = this
 	this.socket.onmessage = function (event) {
-		console.log(event)
   		obj = JSON.parse(event.data)
   		eventName = obj.eventName
   		delete obj['eventName']
@@ -68,7 +67,10 @@ client.send = function(object)
 
 client.on = function(eventname, f)
 {	
-	this.handlers[eventname] = f
+	if(!this.handlers[eventname])
+		this.handlers[eventname] = []
+
+	this.handlers[eventname].push(f)
 }
 
 client.trigger = function(fkey, arg)
@@ -76,7 +78,10 @@ client.trigger = function(fkey, arg)
 	arg = Object.keys(arg).map(function(x){
 		return arg[x]
 	})
-	client.handlers[fkey].apply(client.socket, arg)
+
+	this.handlers[fkey].forEach(function(x){
+		x.apply(client.socket, arg);
+	})
 }
 
 
