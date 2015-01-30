@@ -23,6 +23,7 @@ module Chattr
 
 			rescue Exception => e
 				err(e.message)
+				send("auth.error", e.message)
 			end
 
 			log('connected!')
