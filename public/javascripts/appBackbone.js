@@ -93,14 +93,19 @@ friendsRosterView = new FriendsRosterView({model:friendsRoster});
 
 
 var sampleLogin = function() {
-    ui.newWindow("testwindow2","Login", loginView.el)
+    ui.newWindow("Login","Login", loginView.el)
     loginView.render()
     client.on('auth.error', function(x) {
       loginWindow.flashMessage(x);
     });
+    client.on('load.roster', function(x) {
+      console.log(x);
+      $('#window-Login').hide('fade');
+      sampleFriendRoster();
+    });
 };
 
 var sampleFriendRoster = function() {
-  ui.newWindow("testWindow", "Friends", friendsRosterView.el)
+  ui.newWindow("FriendList", "Friends", friendsRosterView.el)
   friendsRosterView.render()
 }
