@@ -81,10 +81,12 @@ client.trigger = function(fkey, arg)
 	arg = Object.keys(arg).map(function(x){
 		return arg[x]
 	})
-
-	this.handlers[fkey].forEach(function(x){
-		x.apply(client.socket, arg);
-	})
+	if(this.handlers[fkey])
+	{
+		this.handlers[fkey].forEach(function(x){
+			x.apply(client.socket, arg);
+		})
+	}
 }
 
 
