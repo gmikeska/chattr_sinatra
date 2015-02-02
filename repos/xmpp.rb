@@ -7,15 +7,20 @@ module Chattr
 			@socket = ws
 
 			begin
-				send('console.log','logging in... motherfucker')
 				@presence = Jabber::Presence.new(nil,nil,nil)
 				@JID = Jabber::JID.new(username)
 				@client = Jabber::Client.new(@JID)
 				@connection = @client.connect
 				@client.auth(password)
+				
+				@connection.presence_callbacks.add do |data|
+					send('console.log', data)
+				end
 				@connection.message_callbacks.add do |data|
 					send('msg', data)
-
+				end
+				@connection.stanza_callbacks.add do |data|
+					send('console.log', data)
 				end
 				@client.send(@presence)
 				@client.send_with_id Jabber::Iq.new_rosterget() do |data|
