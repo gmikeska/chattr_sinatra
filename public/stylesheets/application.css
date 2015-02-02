@@ -47,10 +47,11 @@ body {
   font-family: "Montserrat", sans-serif; }
 
 .window-content {
-  overflow: scroll; }
+  overflow-x: auto;
+  overflow-y: auto; }
 
 .ui-titlebar {
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid #234E9F;
   background: #b8e1fc;
   /* Old browsers */
   background: -moz-linear-gradient(top, #b8e1fc 0%, #a9d2f3 10%, #90bae4 25%, #90bcea 37%, #90bff0 50%, #6ba8e5 51%, #a2daf5 83%, #bdf3fd 100%);
