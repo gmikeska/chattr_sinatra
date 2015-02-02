@@ -79,4 +79,12 @@ body {
   float: right;
   margin-right: 9px; }
 
+.ui-window {
+  display: inline-block; }
+
+.window-content {
+  padding-left: 10px;
+  padding-top: 24px;
+  padding-right: 10px; }
+
 /*# sourceMappingURL=application.css.map */
