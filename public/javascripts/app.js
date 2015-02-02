@@ -22,6 +22,8 @@ ui.newWindow = function(name, title, content)
       minWidth: 200,
       alsoResize: '#window-content-'+name
   })
+	$("#window-"+name).css('left', $( window ).width()/2 - ($("#window-"+name).width()*2.5))
+	$("#window-"+name).css('top', $( window ).height()/2 - ($("#window-"+name).height()*2))
 	$('#window-content-'+name).resizable({
           disabled:true
     })
