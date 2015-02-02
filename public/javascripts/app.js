@@ -139,6 +139,11 @@ client.on('msg', function(x){
 	if(msg.body != undefined)
 	console.log("IM from "+ msg._from+":"+msg.body)
 })
+client.on('presence', function (x){
+	client.presence = x2js.xml_str2json(x).presence._from.split('/');
+	if (client.presence[0] === loginWindow.get('username'))
+	console.log(client.presence);
+})
 
 models.TestModel = Backbone.Model.extend({
 	addText:function(t){
