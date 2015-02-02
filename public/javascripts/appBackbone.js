@@ -21,12 +21,13 @@ loginWindow = new LoginWindow({
 });
 
 // View for first model below
-var loginTemplateString = '<form>';
+var loginTemplateString = '<center><img class="loginImage" src="/images/jabberlogo.png"></center>';
+loginTemplateString += '<form>';
 loginTemplateString += '<label>Username:</label>'
 loginTemplateString += '<input type="text" name="username" value="<%= username %>"></input><br><br>'
 loginTemplateString += '<label>Password:</label>'
 loginTemplateString += '<input type="text" name="password" value="<%= password %>"></input><br><br>'
-loginTemplateString += '<button class="btn btn-primary" id="login-btn"> LOGIN</button>'
+loginTemplateString += '<center><button class="btn btn-primary" id="login-btn"> LOGIN</button></center>'
 loginTemplateString += '</form>'
 loginTemplateString += '<p><%= notification %></p>'
 
