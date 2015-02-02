@@ -29,14 +29,29 @@ ui.newWindow = function(name, title, content)
       maxWidth: $( window ).width() - 30,
       minHeight: 40,
       minWidth: 200,
-      alsoResize: '#window-content-'+name,
-      zIndex: 100
+      alsoResize: '#window-content-'+name
   })
+	$('#window-titlebar-'+name).mousedown(function(x){
+		bar = x.currentTarget
+
+		$current = $(bar).parent()
+
+		$('.ui-window').not($current).css('z-index', '100');
+      $current.css('z-index', '1000');
+	})
 	$("#window-"+name).css('left', $( window ).width()/2 - ($("#window-"+name).width()*2.5))
 	$("#window-"+name).css('top', $( window ).height()/2 - ($("#window-"+name).height()*2))
 	$('#window-content-'+name).resizable({
           disabled:true
     })
+	$('#window-content-'+name).mousedown(function(x){
+		bar = x.currentTarget
+
+		$current = $(bar).parent()
+
+		$('.ui-window').not($current).css('z-index', '100');
+      $current.css('z-index', '1000');
+	})
 	//	$('#window-content-'+name).css('min-height', '100px')
 	var $close = $('<button>').button({
       icons: {

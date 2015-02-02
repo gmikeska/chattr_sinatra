@@ -159,8 +159,8 @@ var debug = function() {
 client.on('auth.error', function(x) {
       loginWindow.flashMessage(x);
     });
-    client.on('load.roster', function(x) {
-      console.log(x);
-      $('#window-Login').hide('fade');
-      sampleFriendRoster();
-    });
+client.on('load.roster', function(x) {
+  console.log(x);
+  $('#window-Login').hide('fade');
+  sampleFriendRoster();
+  });
