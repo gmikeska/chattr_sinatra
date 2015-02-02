@@ -102,8 +102,8 @@ var FriendsRosterView = Backbone.View.extend({
   chatWindow: function(e) {
     e.preventDefault();
     console.log(e.currentTarget);
-    friendChat = $(e.currentTarget).text()
-    console.log("Friend Selected For Chat");
+    friendChat = $(e.currentTarget).text().remove('@').remove('.')
+    console.log("Friend Selected For Chat: " + friendChat);
     ui.newWindow(friendChat.remove('@').remove('.'), "Direct Chat with: " + friendChat, friendChatView.el);
     friendChatView.render();
   }
