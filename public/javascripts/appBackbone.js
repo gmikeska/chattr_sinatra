@@ -73,7 +73,7 @@ var friendsRoster = new FriendsWindow({
 var ChatWindow = Backbone.Model.extend({});
 
 var friendChat = new ChatWindow({
-  chatHistory: []
+  name: null
 });
 
 
@@ -98,8 +98,9 @@ var FriendsRosterView = Backbone.View.extend({
   chatWindow: function(e) {
     e.preventDefault();
     console.log(e.currentTarget);
+    friendChat = $(e.currentTarget).text()
     console.log("Friend Selected For Chat");
-    ui.newWindow("Friend", "Direct Chat", friendChatView.el);
+    ui.newWindow("Friend", "Direct Chat with: " + friendChat, friendChatView.el);
     friendChatView.render();
   }
 });
