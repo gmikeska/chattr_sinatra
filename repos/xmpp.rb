@@ -14,7 +14,7 @@ module Chattr
 				@client.auth(password)
 				
 				@connection.presence_callbacks.add do |data|
-					send('console.log', data)
+					send('presence', data)
 				end
 				@connection.message_callbacks.add do |data|
 					send('msg', data)

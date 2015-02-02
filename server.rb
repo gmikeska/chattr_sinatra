@@ -1,4 +1,4 @@
-require 'sinatra'
+	require 'sinatra'
 require 'sinatra/reloader'
 require 'sinatra-websocket'
 require 'json'
