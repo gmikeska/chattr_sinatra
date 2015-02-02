@@ -64,10 +64,16 @@ var LoginView = Backbone.View.extend({
   }
 });
 
-var FriendWindow = Backbone.Model.extend({});
+var FriendsWindow = Backbone.Model.extend({});
 
-var friendsRoster = new FriendWindow({
+var friendsRoster = new FriendsWindow({
   friends: []
+});
+
+var ChatWindow = Backbone.Model.extend({});
+
+var friendChat = new ChatWindow({
+  chatHistory: []
 });
 
 
@@ -77,7 +83,7 @@ var FriendsRosterView = Backbone.View.extend({
   initialize: function () {
     this.listenTo(this.model, 'change', this.render)
   },
-  template: _.template('<ul><% client.roster.forEach(function(friend) { %><li><span id=friend><%= friend._jid %></span></li><% }); %></ul>'),
+  template: _.template('<% client.roster.forEach(function(friend) { %><p id=friend><%= friend._jid %></p><% }); %>'),
   render: function() {
     this.$el.html(this.template(this.model.attributes));
     return this;
@@ -91,12 +97,34 @@ var FriendsRosterView = Backbone.View.extend({
   },
   chatWindow: function(e) {
     e.preventDefault();
+    console.log(e.currentTarget);
     console.log("Friend Selected For Chat");
+    ui.newWindow("Friend", "Direct Chat", friendChatView.el);
+    friendChatView.render();
+  }
+});
+
+var FriendChatView = Backbone.View.extend({
+  tagName: 'div',
+  initialize: function () {
+    this.listenTo(this.model, 'change', this.render)
+  },
+  template: _.template('<h1>Individual Chat Here</h1>'),
+  render: function() {
+    this.$el.html(this.template(this.model.attributes));
+    return this;
+  },
+  events: {
+    'change': 'updateModel'
+  },
+  updateModel: function(chatHistory) {
+    this.model.set('chatObject', chatHistory)
   }
 });
 
 var loginView = new LoginView({model:loginWindow}),
-friendsRosterView = new FriendsRosterView({model:friendsRoster});
+friendsRosterView = new FriendsRosterView({model:friendsRoster}),
+friendChatView = new FriendChatView({model:friendChat});
 
 
 var sampleLogin = function() {
