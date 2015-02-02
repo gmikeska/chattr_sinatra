@@ -74,11 +74,9 @@ var friendsRoster = new FriendsWindow({
   friends: []
 });
 
-var ChatWindow = Backbone.Model.extend({});
+var ChatWindowModel = Backbone.Model.extend({});
 
-var friendChat = new ChatWindow({
-  name: null
-});
+
 
 
 // this is the friends roster view
@@ -100,16 +98,25 @@ var FriendsRosterView = Backbone.View.extend({
     this.model.set('rosterObject', friendsList)
   },
   chatWindow: function(e) {
-    e.preventDefault();
-    console.log(e.currentTarget);
     friendChat = $(e.currentTarget).text().remove('@').remove('.')
-    console.log("Friend Selected For Chat: " + friendChat);
-    ui.newWindow(friendChat.remove('@').remove('.'), "Direct Chat with: " + friendChat, friendChatView.el);
-    friendChatView.render();
+    if(!$('#window-'+friendChat).length)
+    {
+        console.log(e.currentTarget);
+        var chatModel = new ChatWindowModel()
+        chatView = new ChatWindowView({model:chatModel});
+        console.log("Friend Selected For Chat: " + friendChat);
+        ui.newWindow(friendChat, "Direct Chat with: " + friendChat, chatView.el);
+        chatView.render();
+    }
+    else
+    {
+      $('.ui-window').not('#window-'+friendChat).css('z-index', '100');
+      $('#window-'+friendChat).css('z-index', '1000');
+    }
   }
 });
 
-var FriendChatView = Backbone.View.extend({
+var ChatWindowView = Backbone.View.extend({
   tagName: 'div',
   initialize: function () {
     this.listenTo(this.model, 'change', this.render)
@@ -129,13 +136,27 @@ var FriendChatView = Backbone.View.extend({
 
 var loginView = new LoginView({model:loginWindow}),
 friendsRosterView = new FriendsRosterView({model:friendsRoster}),
-friendChatView = new FriendChatView({model:friendChat});
 
 
-var sampleLogin = function() {
+showLogin = function() {
     ui.newWindow("Login","Login", loginView.el)
     loginView.render()
-    client.on('auth.error', function(x) {
+    
+}
+
+$(document).ready(showLogin)
+
+var sampleFriendRoster = function() {
+  ui.newWindow("FriendList", "Friends", friendsRosterView.el)
+  friendsRosterView.render()
+}
+
+var debug = function() {
+  client.send({eventName:'login', username: 'chattrtest@blah.im', password:'rubytest123'});
+}
+// event handler for websocket method called presence
+
+client.on('auth.error', function(x) {
       loginWindow.flashMessage(x);
     });
     client.on('load.roster', function(x) {
@@ -143,15 +164,3 @@ var sampleLogin = function() {
       $('#window-Login').hide('fade');
       sampleFriendRoster();
     });
-};
-
-var sampleFriendRoster = function() {
-  ui.newWindow("FriendList", "Friends", friendsRosterView.el)
-  friendsRosterView.render()
-}
-
-var sampleFriendChat = function() {
-  ui.newWindow("Friend", "Direct Chat", friendChatView.el)
-  friendChatView.render()
-}
-// event handler for websocket method called presence

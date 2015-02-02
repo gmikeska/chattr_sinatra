@@ -29,7 +29,8 @@ ui.newWindow = function(name, title, content)
       maxWidth: $( window ).width() - 30,
       minHeight: 40,
       minWidth: 200,
-      alsoResize: '#window-content-'+name
+      alsoResize: '#window-content-'+name,
+      zIndex: 100
   })
 	$("#window-"+name).css('left', $( window ).width()/2 - ($("#window-"+name).width()*2.5))
 	$("#window-"+name).css('top', $( window ).height()/2 - ($("#window-"+name).height()*2))
