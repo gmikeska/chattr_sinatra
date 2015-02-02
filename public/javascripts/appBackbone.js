@@ -8,6 +8,7 @@ var LoginWindow = Backbone.Model.extend({
     // other portions of this view will not need to be changed dynamically
 	},
   login: function() {
+    console.log('sending login info')
     client.send({eventName:'login', username: this.get('username'), password: this.get('password')});
   }
 }),
@@ -48,14 +49,17 @@ var LoginView = Backbone.View.extend({
   updateModel: function(e) {
     var u = $("[name='username']", e.currentTarget).val(),
     p = $("[name='password']", e.currentTarget).val();
-    console.log(u);
     this.model.set('username', u);
     this.model.set('password', p);
     this.model.set('notification', '')
     // grabbing the value of text boxes with our login form
   },
   login: function(e) {
+
     e.preventDefault();
+    console.log('login clicked')
+    $(e.currentTarget).prop('disabled', true)
+
     this.model.login();
   },
   hide: function(x)

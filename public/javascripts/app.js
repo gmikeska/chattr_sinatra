@@ -1,3 +1,12 @@
+(function ($) {
+      $.each(['show', 'hide'], function (i, ev) {
+        var el = $.fn[ev];
+        $.fn[ev] = function () {
+          this.trigger(ev);
+          return el.apply(this, arguments);
+        };
+      });
+    })(jQuery);
 //same code?
 var x2js = new X2JS(); 
 var client = {}
@@ -43,6 +52,10 @@ ui.newWindow = function(name, title, content)
 	$('.ui-resizable-handle', '#window-content-'+name).remove()
 
     ui.windows[name] = $window
+
+    $window.on('hide', function(x){
+    	this.remove()	
+    })
 }
 client.connected = false
 client.connect = function()
