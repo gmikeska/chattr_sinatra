@@ -26,7 +26,7 @@ loginTemplateString += '<form>';
 loginTemplateString += '<label>Username:</label>'
 loginTemplateString += '<input type="text" name="username" value="<%= username %>"></input><br><br>'
 loginTemplateString += '<label>Password:</label>'
-loginTemplateString += '<input type="text" name="password" value="<%= password %>"></input><br><br>'
+loginTemplateString += '<input type="password" name="password" value="<%= password %>"></input><br><br>'
 loginTemplateString += '<center><button class="btn btn-primary" id="login-btn"> LOGIN</button></center>'
 loginTemplateString += '</form>'
 loginTemplateString += '<p><%= notification %></p>'
