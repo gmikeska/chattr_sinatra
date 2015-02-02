@@ -66,8 +66,9 @@ var LoginView = Backbone.View.extend({
 
 var FriendWindow = Backbone.Model.extend({});
 
-var friendsRoster = new FriendWindow({});
-
+var friendsRoster = new FriendWindow({
+  friends: []
+});
 
 
 // this is the friends roster view
@@ -76,16 +77,21 @@ var FriendsRosterView = Backbone.View.extend({
   initialize: function () {
     this.listenTo(this.model, 'change', this.render)
   },
-  template: _.template('<h1>Friends Go Here</h1>'),
+  template: _.template('<ul><% client.roster.forEach(function(friend) { %><li><span id=friend><%= friend._jid %></span></li><% }); %></ul>'),
   render: function() {
     this.$el.html(this.template(this.model.attributes));
     return this;
   },
   events: {
-    'change': 'updateModel'
+    'change': 'updateModel',
+    'click #friend': 'chatWindow'
   },
   updateModel: function(friendsList) {
     this.model.set('rosterObject', friendsList)
+  },
+  chatWindow: function(e) {
+    e.preventDefault();
+    console.log("Friend Selected For Chat");
   }
 });
 
@@ -110,3 +116,9 @@ var sampleFriendRoster = function() {
   ui.newWindow("FriendList", "Friends", friendsRosterView.el)
   friendsRosterView.render()
 }
+
+var sampleFriendChat = function() {
+  ui.newWindow("Friend", "Direct Chat", friendChatView.el)
+  friendChatView.render()
+}
+// event handler for websocket method called presence
