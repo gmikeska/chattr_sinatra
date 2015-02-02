@@ -64,6 +64,10 @@ var LoginView = Backbone.View.extend({
   }
 });
 
+var FriendWindow = Backbone.Model.extend({});
+
+var friendsRoster = new FriendWindow({});
+
 
 
 // this is the friends roster view
@@ -85,14 +89,20 @@ var FriendsRosterView = Backbone.View.extend({
   }
 });
 
-var loginView = new LoginView({model:loginWindow});
-// friendsRosterView = new FriendsRosterView({model:friendsRoster});
+var loginView = new LoginView({model:loginWindow}),
+friendsRosterView = new FriendsRosterView({model:friendsRoster});
 
 
-var sampletable = function() {
-    ui.newWindow("testwindow2","Log In", loginView.el)
+var sampleLogin = function() {
+    ui.newWindow("testwindow2","Login", loginView.el)
+
     loginView.render()
     client.on('auth.error', function(x) {
       loginWindow.flashMessage(x);
     });
 };
+
+var sampleFriendRoster = function() {
+  ui.newWindow("testWindow", "Friends", friendsRosterView.el)
+  friendsRosterView.render()
+}
