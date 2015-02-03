@@ -1,4 +1,5 @@
 require 'xmpp4r'
+require 'xmpp4r/bytestreams/helper/filetransfer'
 #same code?
 module Chattr
 	class User
@@ -16,6 +17,13 @@ module Chattr
 				@connection.presence_callbacks.add do |data|
 					send('presence', data)
 				end
+				@ft = Jabber::FileTransfer::Helper.new(@connection)
+				@ft.add_incoming_callback do |iq,file|
+					send("console.log","Incoming file transfer from #{iq.from}: #{file.fname} (#{file.size / 1024} KB)")
+					p "Incoming file transfer from #{iq.from}: #{file.fname} (#{file.size / 1024} KB)"
+				end
+				p 
+
 				@connection.message_callbacks.add do |data|
 					send('msg', data)
 				end
