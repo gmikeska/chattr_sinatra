@@ -92,4 +92,11 @@ body {
   height: 80px;
   margin-bottom: 15px; }
 
+.status {
+  height: 25px;
+  width: 25px;
+  float: right;
+  margin-right: 2px;
+  margin-left: 20px; }
+
 /*# sourceMappingURL=application.css.map */
