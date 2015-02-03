@@ -53,7 +53,7 @@ module Chattr
 		end
 
 		def err (msg)
-			send("server.error", msg)
+			send("auth.error", msg)
 			puts msg
 		end
 

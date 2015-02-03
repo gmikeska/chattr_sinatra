@@ -55,11 +55,17 @@ var LoginView = Backbone.View.extend({
     // grabbing the value of text boxes with our login form
   },
   login: function(e) {
-
     e.preventDefault();
-    console.log('login clicked')
+    $('#window-Login').css('opacity', '.1')
     $(e.currentTarget).prop('disabled', true)
-
+    $.magnificPopup.open({
+      items: {
+        src: $('#loading'),
+        type: 'inline'
+      },
+      modal:true
+    });
+    $('#loading').slideDown()
     this.model.login();
   },
   hide: function(x)
@@ -164,10 +170,13 @@ var debug = function() {
 // event handler for websocket method called presence
 
 client.on('auth.error', function(x) {
+    $('#window-Login').css('opacity', '1')
+    $.magnificPopup.close()
       loginWindow.flashMessage(x);
     });
 client.on('load.roster', function(x) {
   console.log(x);
   $('#window-Login').hide('fade');
+  $.magnificPopup.close()
   sampleFriendRoster();
 });
