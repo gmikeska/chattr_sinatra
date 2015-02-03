@@ -141,12 +141,17 @@ client.on('msg', function(x){
 	console.log("IM from "+ msg._from+":"+msg.body)
 })
 client.on('presence', function (x){
-	client.presence = x2js.xml_str2json(x).presence._from.split('/');
-	if ((client.presence[0] !== loginWindow.get('username'))&& client.presence[1]) {
-		console.log(client.presence[0] + " is online.")
-	} else {
-		console.log(client.presence[0]+' is offline')
-	}
+
+	//client.presence = x2js.xml_str2json(x).presence._from.split('/');
+	var presence = x2js.xml_str2json(x).presence
+	var username = presence._from
+	var status = presence._type
+
+	if(!status)
+		status = 'available'
+	if(username.indexOf('/') != -1)
+		username = username.split('/')[0]
+	console.log(username+":"+status)
 })
 
 models.TestModel = Backbone.Model.extend({
