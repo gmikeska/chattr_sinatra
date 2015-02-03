@@ -119,6 +119,7 @@ client.trigger = function(fkey, arg)
 }
 
 
+
 client.connect()
 
 client.on('console.log', function(x){
@@ -132,7 +133,7 @@ client.on('server.error', function(x){
 
 client.on('load.roster', function(x){
 	client.roster = x2js.xml_str2json(x).iq.query.item
-	friendsRoster.friends = client.roster
+	// friendsRoster.friends = client.roster
 	console.log('Connected')
 })
 client.on('msg', function(x){
@@ -141,6 +142,9 @@ client.on('msg', function(x){
 	console.log("IM from "+ msg._from+":"+msg.body)
 })
 client.on('presence', function (x){
+
+	var currentUser = loginWindow.get('username')
+	console.log(currentUser)
 
 	//client.presence = x2js.xml_str2json(x).presence._from.split('/');
 	var presence = x2js.xml_str2json(x).presence
@@ -152,6 +156,12 @@ client.on('presence', function (x){
 	if(username.indexOf('/') != -1)
 		username = username.split('/')[0]
 	console.log(username+":"+status)
+
+	friends = friendsRoster.get('friends')
+	if (currentUser != username) {
+		friends[username] = status
+		friendsRoster.set('friends', friends)
+	}
 })
 
 models.TestModel = Backbone.Model.extend({
