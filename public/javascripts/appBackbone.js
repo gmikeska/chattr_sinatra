@@ -85,7 +85,7 @@ var FriendsRosterView = Backbone.View.extend({
   initialize: function () {
     this.listenTo(this.model, 'change', this.render)
   },
-  template: _.template('<% Object.keys(this.model.get("friends")).forEach(function(friend) { %><p id=friend><%= friend%><% if (friendsRoster.get("friends")[friend] === "available") { %><img class="status" src="../images/available.png"><% } else { %><img class="status" src="../images/offline.png"><% } %></p><% }); %>'),
+  template: _.template('<% Object.keys(this.model.get("friends")).forEach(function(friend) { %><p class="rosterEntry"><%= friend%><% if (friendsRoster.get("friends")[friend] === "available") { %><img class="status" src="../images/available.png"><% } else { %><img class="status" src="../images/offline.png"><% } %></p><% }); %>'),
   render: function() {
     this.$el.html(this.template(this.model.attributes));
     return this;
