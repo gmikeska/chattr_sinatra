@@ -11,6 +11,7 @@
 var x2js = new X2JS(); 
 var client = {}
 ui = {}
+audio = {}
 views = {}
 models = {}
 client.handlers = {}
@@ -87,7 +88,15 @@ client.connect = function()
 	}
 	socket.onopen = function (event) {
  		client.connected = true
+ 		$(".login_sound").trigger('load');
+		audio.login = $(".login_sound").trigger.bind($(".login_sound"), 'play');
 
+		$(".logout_sound").trigger('load');
+		audio.logout = $(".logout_sound").trigger.bind($(".logout_sound"), 'play');
+		$(".receive_sound").trigger('load');
+		audio.receive = $(".receive_sound").trigger.bind($(".receive_sound"), 'play');
+		$(".send_sound").trigger('load');
+		audio.send = $(".send_sound").trigger.bind($(".send_sound"), 'play');
 	};
 }
 
@@ -153,6 +162,11 @@ client.on('presence', function (x){
 
 	if(!status)
 		status = 'available'
+
+	if(status == 'available')
+		audio.login()
+	if(status == 'unavailable')
+		audio.logout()
 	if(username.indexOf('/') != -1)
 		username = username.split('/')[0]
 	console.log(username+":"+status)
