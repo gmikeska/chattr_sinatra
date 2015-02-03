@@ -71,7 +71,7 @@ var LoginView = Backbone.View.extend({
 var FriendsWindow = Backbone.Model.extend({});
 
 var friendsRoster = new FriendsWindow({
-  friends: null
+  friends: {}
 });
 
 var ChatWindowModel = Backbone.Model.extend({});
@@ -85,7 +85,7 @@ var FriendsRosterView = Backbone.View.extend({
   initialize: function () {
     this.listenTo(this.model, 'change', this.render)
   },
-  template: _.template('<% client.roster.forEach(function(friend) { %><p id=friend><%= friend._jid %></p><% }); %>'),
+  template: _.template('<% Object.keys(this.model.get("friends")).forEach(function(friend) { %><p id=friend><%= friend%><% if (friendsRoster.get("friends")[friend] === "available") { %><img src="../images/available.png"><% } else { %><img src="../images/offline.png"><% } %></p><% }); %>'),
   render: function() {
     this.$el.html(this.template(this.model.attributes));
     return this;
@@ -95,7 +95,7 @@ var FriendsRosterView = Backbone.View.extend({
     'click #friend': 'chatWindow'
   },
   updateModel: function(friendsList) {
-    this.model.set('rosterObject', friendsList)
+    this.model.set('friends', friendsList)
   },
   chatWindow: function(e) {
     friendChat = $(e.currentTarget).text().remove('@').remove('.')
@@ -163,4 +163,4 @@ client.on('load.roster', function(x) {
   console.log(x);
   $('#window-Login').hide('fade');
   sampleFriendRoster();
-  });
+});
