@@ -162,6 +162,7 @@ client.on('presence', function (x){
 		friends[username] = status
 		friendsRoster.set('friends', friends)
 	}
+	friendsRosterView.render()
 })
 
 models.TestModel = Backbone.Model.extend({
