@@ -142,17 +142,25 @@ client.on('server.error', function(x){
 
 client.on('load.roster', function(x){
 	client.roster = x2js.xml_str2json(x).iq.query.item
-	// friendsRoster.friends = client.roster
+	// models.roster.friends = client.roster
 	console.log('Connected')
 })
 client.on('msg', function(x){
 	msg = x2js.xml_str2json(x).message
 	if(msg.body != undefined)
 	console.log("IM from "+ msg._from+":"+msg.body)
+	if(msg._from.indexOf('/'))
+		from = msg._from.split('/')[0]
+	else
+		from = msg._from
+	console.log(from.remove('.').remove('@'))
+	views.im[from.remove('.').remove('@')].model.chat(from, msg.body)
+	views.im[from.remove('.').remove('@')].render()
+
 })
 client.on('presence', function (x){
 
-	var currentUser = loginWindow.get('username')
+	var currentUser = models.login.get('username')
 	console.log(currentUser)
 
 	//client.presence = x2js.xml_str2json(x).presence._from.split('/');
@@ -171,12 +179,12 @@ client.on('presence', function (x){
 		username = username.split('/')[0]
 	console.log(username+":"+status)
 
-	friends = friendsRoster.get('friends')
+	friends = models.roster.get('friends')
 	if (currentUser != username) {
 		friends[username] = status
-		friendsRoster.set('friends', friends)
+		models.roster.set('friends', friends)
 	}
-	friendsRosterView.render()
+	views.roster.render()
 })
 
 models.TestModel = Backbone.Model.extend({
@@ -199,6 +207,7 @@ views.testView = Backbone.View.extend({
     	return(this)
   }
 })
+
 myView = new views.testView({model:mymodel})
 sampletable = function()
 {

@@ -1,5 +1,5 @@
 //same code?
-var LoginWindow = Backbone.Model.extend({
+var LoginWindowModel = Backbone.Model.extend({
 	flashMessage: function(msg) {
 		this.set('notification', msg)
     this.set('username', '')
@@ -11,9 +11,9 @@ var LoginWindow = Backbone.Model.extend({
     console.log('sending login info')
     client.send({eventName:'login', username: this.get('username'), password: this.get('password')});
   }
-}),
+})
 
-loginWindow = new LoginWindow({
+models.login = new LoginWindowModel({
   username: null,
   password: null,
   notification: null
@@ -44,7 +44,8 @@ var LoginView = Backbone.View.extend({
   },
   events: {
     'change': 'updateModel',
-    'click #login-btn': 'login'
+    'click #login-btn': 'login',
+    'keypress' : 'keyPress'
   },
   updateModel: function(e) {
     var u = $("[name='username']", e.currentTarget).val(),
@@ -71,27 +72,45 @@ var LoginView = Backbone.View.extend({
   hide: function(x)
   {
     this.$el.hide('fade')
+  },
+  keyPress: function(x)
+  {
+    if(x.keyCode == 13)
+    {
+      x.preventDefault()
+      //console.log($(':focus').attr('name'))
+      this.model.set($(':focus').attr('name'), $(':focus').val())
+      $('#login-btn').click()
+    }
   }
 });
 
-var FriendsWindow = Backbone.Model.extend({});
+var FriendsWindowModel = Backbone.Model.extend({});
 
-var friendsRoster = new FriendsWindow({
+models.roster = new FriendsWindowModel({
   friends: {}
 });
 
-var ChatWindowModel = Backbone.Model.extend({});
+var ChatWindowModel = Backbone.Model.extend({
+  chat:function(name,text)
+  {
+    chats = this.get('chats')
+    chats.push("<b>"+name+"</b>:"+text)
+    console.log(name+":"+text)
+    this.set('chats', chats)
+  }
+});
 
 
 
 
 // this is the friends roster view
-var FriendsRosterView = Backbone.View.extend({
+var FriendsWindowView = Backbone.View.extend({
   tagName: 'div',
   initialize: function () {
     this.listenTo(this.model, 'change', this.render)
   },
-  template: _.template('<% Object.keys(this.model.get("friends")).forEach(function(friend) { %><p class="rosterEntry"><%= friend%><% if (friendsRoster.get("friends")[friend] === "available") { %><img class="status" src="../images/available.png"><% } else { %><img class="status" src="../images/offline.png"><% } %></p><% }); %>'),
+  template: _.template('<% Object.keys(this.model.get("friends")).forEach(function(friend) { %><p class="rosterEntry"><%= friend%><% if (models.roster.get("friends")[friend] === "available") { %><img class="status" src="../images/available.png"><% } else { %><img class="status" src="../images/offline.png"><% } %></p><% }); %>'),
   render: function() {
     this.$el.html(this.template(this.model.attributes));
     return this;
@@ -109,12 +128,14 @@ var FriendsRosterView = Backbone.View.extend({
     {
         console.log(e.currentTarget);
         var chatModel = new ChatWindowModel({
-          chats: []
+          chats: [],
+          friend:$(e.currentTarget).text()
         })
-        chatView = new ChatWindowView({model:chatModel});
-        console.log("Friend Selected For Chat: " + friendChat);
-        ui.newWindow(friendChat, "Direct Chat with: " + friendChat, chatView.el);
-        chatView.render();
+        views.im = {}
+        views.im[friendChat] = new ChatWindowView({model:chatModel});
+        console.log("Friend Selected For Chat: " + $(e.currentTarget).text());
+        ui.newWindow(friendChat, $(e.currentTarget).text(), views.im[friendChat].el);
+        views.im[friendChat].render();
     }
     else
     {
@@ -129,39 +150,40 @@ var ChatWindowView = Backbone.View.extend({
   initialize: function () {
     this.listenTo(this.model, 'change', this.render)
   },
-  template: _.template('<h1>Chat History</h1><form><textarea></textarea><br><button class="btn btn-primary" id="submit-btn">SUBMIT</button></form>'),
+  template: _.template('<div class="chatwindow"><%= chats.join("<br>") %></div><br><div><textarea></textarea><br><br><button style="margin-bottom:12px;" class="btn btn-primary button">SUBMIT</button></div>'),
   render: function() {
     this.$el.html(this.template(this.model.attributes));
     return this;
   },
   events: {
     'change': 'updateModel',
-    'click button': 'recordChat'
+    'click .button': 'send'
   },
-  updateModel: function(chatHistory) {
-    this.model.set('chats', chatHistory)
-  },
-  recordChat: function(chat) {
-    chats = this.model.get('chat')
-    chats.push(chat)
+  send: function(e) {
+    audio.send()
+    console.log(e)
+    this.model.chat(models.login.get('username'), $('textarea', this.el).val())
+    console.log(this.model.get('friend'))
+    client.send({eventName:'msg',user:this.model.get('friend'), message:$('textarea', this.el).val()})
+    this.render()
   }
 });
 
-var loginView = new LoginView({model:loginWindow}),
-friendsRosterView = new FriendsRosterView({model:friendsRoster}),
+views.login = new LoginView({model:models.login}),
+views.roster = new FriendsWindowView({model:models.roster}),
 
 
 showLogin = function() {
-    ui.newWindow("Login","Login", loginView.el)
-    loginView.render()
+    ui.newWindow("Login","Login", views.login.el)
+    views.login.render()
     
 }
 
 $(document).ready(showLogin)
 
 var sampleFriendRoster = function() {
-  ui.newWindow("FriendList", "Friends", friendsRosterView.el)
-  friendsRosterView.render()
+  ui.newWindow("FriendList", "Friends", views.roster.el)
+  views.roster.render()
 }
 
 var debug = function() {
@@ -172,7 +194,7 @@ var debug = function() {
 client.on('auth.error', function(x) {
     $('#window-Login').css('opacity', '1')
     $.magnificPopup.close()
-      loginWindow.flashMessage(x);
+      models.login.flashMessage(x);
     });
 client.on('load.roster', function(x) {
   console.log(x);
