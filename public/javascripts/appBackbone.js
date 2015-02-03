@@ -71,7 +71,7 @@ var LoginView = Backbone.View.extend({
 var FriendsWindow = Backbone.Model.extend({});
 
 var friendsRoster = new FriendsWindow({
-  friends: []
+  friends: null
 });
 
 var ChatWindowModel = Backbone.Model.extend({});

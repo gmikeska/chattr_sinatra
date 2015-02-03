@@ -132,6 +132,7 @@ client.on('server.error', function(x){
 
 client.on('load.roster', function(x){
 	client.roster = x2js.xml_str2json(x).iq.query.item
+	friendsRoster.friends = client.roster
 	console.log('Connected')
 })
 client.on('msg', function(x){
@@ -141,8 +142,11 @@ client.on('msg', function(x){
 })
 client.on('presence', function (x){
 	client.presence = x2js.xml_str2json(x).presence._from.split('/');
-	if (client.presence[0] === loginWindow.get('username'))
-	console.log(client.presence);
+	if ((client.presence[0] !== loginWindow.get('username'))&& client.presence[1]) {
+		console.log(client.presence[0] + " is online.")
+	} else {
+		console.log(client.presence[0]+' is offline')
+	}
 })
 
 models.TestModel = Backbone.Model.extend({
