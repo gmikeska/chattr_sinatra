@@ -92,7 +92,7 @@ var FriendsRosterView = Backbone.View.extend({
   },
   events: {
     'change': 'updateModel',
-    'click #friend': 'chatWindow'
+    'click .rosterEntry': 'chatWindow'
   },
   updateModel: function(friendsList) {
     this.model.set('friends', friendsList)
@@ -102,7 +102,9 @@ var FriendsRosterView = Backbone.View.extend({
     if(!$('#window-'+friendChat).length)
     {
         console.log(e.currentTarget);
-        var chatModel = new ChatWindowModel()
+        var chatModel = new ChatWindowModel({
+          chats: []
+        })
         chatView = new ChatWindowView({model:chatModel});
         console.log("Friend Selected For Chat: " + friendChat);
         ui.newWindow(friendChat, "Direct Chat with: " + friendChat, chatView.el);
@@ -121,16 +123,21 @@ var ChatWindowView = Backbone.View.extend({
   initialize: function () {
     this.listenTo(this.model, 'change', this.render)
   },
-  template: _.template('<h1>Individual Chat Here</h1>'),
+  template: _.template('<h1>Chat History</h1><form><textarea></textarea><br><button class="btn btn-primary" id="submit-btn">SUBMIT</button></form>'),
   render: function() {
     this.$el.html(this.template(this.model.attributes));
     return this;
   },
   events: {
-    'change': 'updateModel'
+    'change': 'updateModel',
+    'click button': 'recordChat'
   },
   updateModel: function(chatHistory) {
-    this.model.set('chatObject', chatHistory)
+    this.model.set('chats', chatHistory)
+  },
+  recordChat: function(chat) {
+    chats = this.model.get('chat')
+    chats.push(chat)
   }
 });
 
