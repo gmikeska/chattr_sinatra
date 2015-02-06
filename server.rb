@@ -29,9 +29,20 @@ module Chattr
 				  puts 'logout'
 				when 'msg'
 					@client.chat_message(@message['user'], @message['message'])
+				when 'chat_typing'
+					@client.chat_status(@message['user'], :composing)
+				when 'chat_empty'
+					@client.chat_status(@message['user'], :active)
 				when "echo"
 					message = {eventName: "recieve", data: @message['data']}
 					ws.send(JSON.generate(message))
+				when "accept"
+					@client.accept(@message['name'])
+				when "add"
+					@client.add(@message['name'])
+				when "accept_add"
+					p "accept add"
+					@client.accept_add(@message['name'])
 				else
 				  puts @message['eventName']
 				end
@@ -39,8 +50,9 @@ module Chattr
 		      end
 
 		      ws.onclose do
-		        warn("websocket closed")
-		        settings.sockets.delete(ws)
+		      	if @client
+		        	@client.disconnect()
+		        end
 		      end
 
 		    end #request.websocket do

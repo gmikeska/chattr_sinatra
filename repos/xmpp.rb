@@ -1,5 +1,6 @@
 require 'xmpp4r'
 require 'xmpp4r/bytestreams/helper/filetransfer'
+require 'xmpp4r/roster/helper/roster'
 #same code?
 module Chattr
 	class User
@@ -12,7 +13,9 @@ module Chattr
 				@JID = Jabber::JID.new(username)
 				@client = Jabber::Client.new(@JID)
 				@connection = @client.connect
+				@pending = []
 				@client.auth(password)
+				@rosterManager = Jabber::Roster::Helper.new(@connection)
 				
 				@connection.presence_callbacks.add do |data|
 					send('presence', data)
@@ -30,8 +33,11 @@ module Chattr
 				@connection.stanza_callbacks.add do |data|
 					send('console.log', data)
 				end
+
 				@client.send(@presence)
+
 				@client.send_with_id Jabber::Iq.new_rosterget() do |data|
+					rosterInit()
 					send("load.roster", data)
 				end
 
@@ -46,10 +52,32 @@ module Chattr
 			@socket.send(JSON.generate({eventName:comm, data:message}))
 
 		end
-
-
+		def rosterInit()
+			@rosterManager = Jabber::Roster::Helper.new(@connection)
+			
+			@rosterManager.add_subscription_request_callback do |item, presence|
+					send('console.log', item)
+			end
+		end
+		def add(name)
+			jid = Jabber::JID.new(name)
+			@rosterManager.add(jid, nil, true)
+		end
+		def accept(name)
+			@rosterManager.accept_subscription(name)
+		end
+		def accept_add(name)
+			accept(name)
+			add(name)
+		end
+		def decline(name)
+			@rosterManager.decline_subscription(name)
+		end
 		def log (msg)
 			send("console.log", msg)
+		end
+		def disconnect
+			@connection.close!()
 		end
 
 		def err (msg)
@@ -59,6 +87,14 @@ module Chattr
 
 		def chat_message(user, msg)
 			m = Jabber::Message.new(user, msg)
+			m.type=:chat
+			@client.send(m)
+		end
+
+		def chat_status(user, state)
+			p "#{user} - #{state}"
+			m = Jabber::Message.new(user)
+			m.chat_state=state
 			m.type=:chat
 			@client.send(m)
 		end

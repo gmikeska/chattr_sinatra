@@ -13,6 +13,7 @@ var client = {}
 ui = {}
 audio = {}
 views = {}
+views.im = {}
 models = {}
 client.handlers = {}
 ui.windows = {}
@@ -73,7 +74,10 @@ ui.newWindow = function(name, title, content)
     $window.on('hide', function(x){
     	this.remove()	
     })
+    return $window
 }
+
+
 client.connected = false
 client.connect = function()
 {
@@ -90,7 +94,8 @@ client.connect = function()
  		client.connected = true
  		$(".login_sound").trigger('load');
 		audio.login = $(".login_sound").trigger.bind($(".login_sound"), 'play');
-
+		$(".request_sound").trigger('load');
+		audio.request = $(".request_sound").trigger.bind($(".request_sound"), 'play');
 		$(".logout_sound").trigger('load');
 		audio.logout = $(".logout_sound").trigger.bind($(".logout_sound"), 'play');
 		$(".receive_sound").trigger('load');
@@ -131,88 +136,5 @@ client.trigger = function(fkey, arg)
 
 client.connect()
 
-client.on('console.log', function(x){
-	console.log("Message Recieved:"+x)
-})
-
-client.on('server.error', function(x){
-	console.error("Server Error:"+x)
-
-})
-
-client.on('load.roster', function(x){
-	client.roster = x2js.xml_str2json(x).iq.query.item
-	// models.roster.friends = client.roster
-	console.log('Connected')
-})
-client.on('msg', function(x){
-	msg = x2js.xml_str2json(x).message
-	if(msg.body != undefined)
-	console.log("IM from "+ msg._from+":"+msg.body)
-	if(msg._from.indexOf('/'))
-		from = msg._from.split('/')[0]
-	else
-		from = msg._from
-	console.log(from.remove('.').remove('@'))
-	views.im[from.remove('.').remove('@')].model.chat(from, msg.body)
-	views.im[from.remove('.').remove('@')].render()
-
-})
-client.on('presence', function (x){
-
-	var currentUser = models.login.get('username')
-	console.log(currentUser)
-
-	//client.presence = x2js.xml_str2json(x).presence._from.split('/');
-	var presence = x2js.xml_str2json(x).presence
-	var username = presence._from
-	var status = presence._type
-
-	if(!status)
-		status = 'available'
-
-	if(status == 'available')
-		audio.login()
-	if(status == 'unavailable')
-		audio.logout()
-	if(username.indexOf('/') != -1)
-		username = username.split('/')[0]
-	console.log(username+":"+status)
-
-	friends = models.roster.get('friends')
-	if (currentUser != username) {
-		friends[username] = status
-		models.roster.set('friends', friends)
-	}
-	views.roster.render()
-})
-
-models.TestModel = Backbone.Model.extend({
-	addText:function(t){
-		this.set('text', this.get('text')+t)
-	}
-})
-
-mymodel = new models.TestModel({text:'yes'})
 
 
-views.testView = Backbone.View.extend({
-	tagName: "div",
-	initialize: function() {
-    this.listenTo(this.model, "change", this.render);
-  	},
-  	template: _.template('<div><%= text %></div>'),
-  	render: function() {
-    	this.$el.html(this.template(this.model.attributes))
-    	return(this)
-  }
-})
-
-myView = new views.testView({model:mymodel})
-sampletable = function()
-{
-
-	ui.newWindow("testwindow2","Another", myView.el)
-
-	myView.render()
-}
